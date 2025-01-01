@@ -1,7 +1,6 @@
 import { Client } from "pg";
 
 const query = async (queryObject) => {
-  // try {
   const client = new Client({
     hosts: process.env.POSTGRES_HOSTS,
     port: process.env.POSTRGES_PORT,
@@ -9,23 +8,25 @@ const query = async (queryObject) => {
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
   });
-  await client.connect();
 
-  const result = await client
-    .query(queryObject)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      throw error;
-    });
-  console.log("result: ", result);
+  try {
+    await client.connect();
 
-  await client.end();
-  return result;
-  // } catch (error) {
-  //   throw error;
-  // }
+    const result = await client
+      .query(queryObject)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    return result;
+  } catch (error) {
+    throw error;
+  } finally {
+    await client.end();
+  }
 };
 
 export default {
