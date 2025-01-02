@@ -7,6 +7,11 @@ const status = async (request, response) => {
     values: [database_name],
   });
 
+  const max_connections = (
+    await database.query(
+      `SELECT name, setting as max FROM pg_settings WHERE name = 'max_connections';`,
+    )
+  ).rows[0].max;
   const database_opened_connections =
     database_opened_connections_result.rows[0].count;
 
@@ -23,6 +28,7 @@ const status = async (request, response) => {
       database: {
         version: database_version,
         opened_connetions: database_opened_connections,
+        max_connections: parseInt(max_connections),
       },
     },
   });

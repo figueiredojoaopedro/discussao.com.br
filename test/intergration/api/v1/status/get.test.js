@@ -17,9 +17,6 @@ test("GET to api/v1/status should return 200", async () => {
   // test opened_connections
   expect(response_body.dependencies.database.opened_connetions).toEqual(1);
 
-  // // test used_connections
-  // expect(response_body.opened_connections).toBeLessThanOrEqual(1);
-
-  // // test max_connections
-  // expect(response_body.max_connections).toEqual(100);
+  // test max_connections
+  expect(response_body.dependencies.database.max_connections).toEqual(100);
 });
